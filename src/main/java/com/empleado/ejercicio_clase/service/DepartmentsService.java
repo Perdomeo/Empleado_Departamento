@@ -1,5 +1,6 @@
 package com.empleado.ejercicio_clase.service;
 
+import com.empleado.ejercicio_clase.dto.DepartmentsDTO;
 import com.empleado.ejercicio_clase.entity.Departments;
 import com.empleado.ejercicio_clase.repository.DepartmentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,15 @@ public class DepartmentsService {
     }
 
     //This method saves a new departments in database's table departments
-    public Departments save(Departments departments){
+    public Departments save(DepartmentsDTO departmentsDTO){
+        Departments departments = new Departments();
+        departments.setDepartments(departmentsDTO.getDepartments());
+        return departmentsRepository.save(departments);
+    }
+
+    public Departments update(DepartmentsDTO departmentsDTO){
+        Departments departments = new Departments();
+        departments.setDepartments(departmentsDTO.getDepartments());
         return departmentsRepository.save(departments);
     }
 

@@ -1,6 +1,7 @@
 package com.empleado.ejercicio_clase.controller;
 
 import com.empleado.ejercicio_clase.entity.Departments;
+import com.empleado.ejercicio_clase.dto.DepartmentsDTO;
 import com.empleado.ejercicio_clase.service.DepartmentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +30,17 @@ public class DepartmentsController {
     }
 
     @PostMapping
-    public Departments createDepartment(@RequestBody Departments departments){
-        return departmentsService.save(departments);
+    public Departments createDepartment(@RequestBody DepartmentsDTO departmentsDTO){
+        return departmentsService.save(departmentsDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Departments> updateDepartment(@PathVariable long id, @RequestBody Departments departmentsDetails){
         Optional<Departments> departments = departmentsService.findById(id);
         if(departments.isPresent()){
-            Departments updatedDepartments = departments.get();
-            updatedDepartments.setDepartments(departmentsDetails.getDepartments());
-            return ResponseEntity.ok(departmentsService.save(updatedDepartments));
+            DepartmentsDTO departmentsDTO = new DepartmentsDTO();
+            departmentsDTO.setDepartments(departmentsDetails.getDepartments());
+            return ResponseEntity.ok(departmentsService.save(departmentsDTO));
         }else{
             return ResponseEntity.notFound().build();
         }
