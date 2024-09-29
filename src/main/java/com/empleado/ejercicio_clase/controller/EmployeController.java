@@ -3,6 +3,7 @@ package com.empleado.ejercicio_clase.controller;
 import com.empleado.ejercicio_clase.dto.EmployeDTO;
 import com.empleado.ejercicio_clase.entity.Employe;
 import com.empleado.ejercicio_clase.service.EmployeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class EmployeController {
 
     // Crear un nuevo empleado
     @PostMapping
-    public ResponseEntity<Employe> createEmploye(@RequestBody EmployeDTO employeDTO) {
+    public ResponseEntity<Employe> createEmploye(@RequestBody @Valid EmployeDTO employeDTO) {
         Employe newEmploye = employeService.save(employeDTO);
         return ResponseEntity.ok(newEmploye);
     }
 
     // Actualizar un empleado existente
     @PutMapping("/{id}")
-    public ResponseEntity<Employe> updateEmploye(@PathVariable long id, @RequestBody EmployeDTO employeDTO) {
+    public ResponseEntity<Employe> updateEmploye(@PathVariable long id, @RequestBody @Valid EmployeDTO employeDTO) {
         Optional<Employe> findEmploye = employeService.findById(id);
         if (findEmploye.isPresent()) {
             // Pasar el ID y el DTO al servicio para actualizar

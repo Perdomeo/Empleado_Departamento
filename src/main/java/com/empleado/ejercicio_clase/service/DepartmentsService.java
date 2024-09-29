@@ -1,43 +1,58 @@
 package com.empleado.ejercicio_clase.service;
 
-import com.empleado.ejercicio_clase.dto.DepartmentsDTO;
-import com.empleado.ejercicio_clase.entity.Departments;
-import com.empleado.ejercicio_clase.repository.DepartmentsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import com.empleado.ejercicio_clase.dto.DepartmentsDTO;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.empleado.ejercicio_clase.entity.Departments;
+import com.empleado.ejercicio_clase.repository.DepartmentsRepository;
+
 @Service
 public class DepartmentsService {
-    @Autowired//Singleton backwards for just one DepartmentsRepository instance
+
+    @Autowired
     private DepartmentsRepository departmentsRepository;
 
-    //This method brings out every user stored in database's table departments
-    public List<Departments> findAll(){
+    // Método para obtener todos los departamentos
+    public List<Departments> findAll() {
         return departmentsRepository.findAll();
     }
 
-    //This method finds a specific departments searching by id
-    public Optional<Departments> findById(long id){
+    // Método para buscar un departamento por ID
+    public Optional<Departments> findById(long id) {
         return departmentsRepository.findById(id);
     }
 
-    //This method saves a new departments in database's table departments
-    public Departments save(DepartmentsDTO departmentsDTO){
-        Departments departments = new Departments();
-        departments.setDepartments(departmentsDTO.getDepartments());
-        return departmentsRepository.save(departments);
+    // Método para crear un nuevo departamento
+    public Departments save(DepartmentsDTO departmentsDTO) {
+        Departments department = new Departments();
+        department.setDepartments(departmentsDTO.getDepartments());
+        return departmentsRepository.save(department);
     }
 
-    public Departments update(DepartmentsDTO departmentsDTO){
-        Departments departments = new Departments();
-        departments.setDepartments(departmentsDTO.getDepartments());
-        return departmentsRepository.save(departments);
+    // Método para actualizar un departamento existente
+    public Departments update(long id, DepartmentsDTO departmentsDTO) {
+        Optional<Departments> departmentsOptional = departmentsRepository.findById(id);
+
+        if (departmentsOptional.isPresent()) {
+            Departments department = departmentsOptional.get();
+            department.setDepartments(departmentsDTO.getDepartments());
+            return departmentsRepository.save(department);
+        } else {
+            throw new EntityNotFoundException("Departamento no encontrado con el ID: " + id);
+        }
     }
 
-    //This method deletes a specific departments by using its id
-    public void deleteById(long id){
-        departmentsRepository.deleteById(id);
+    // Método para eliminar un departamento por ID
+    public void deleteById(long id) {
+        Optional<Departments> departmentsOptional = departmentsRepository.findById(id);
+        if (departmentsOptional.isPresent()) {
+            departmentsRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Departamento no encontrado con el ID: " + id);
+        }
     }
 }

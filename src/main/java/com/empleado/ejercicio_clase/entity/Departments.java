@@ -10,7 +10,7 @@ public class Departments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "departments", length = 8)
+    @Column(name = "departments", length = 30)
     private String departments;
 
     @OneToMany(mappedBy = "departments")
